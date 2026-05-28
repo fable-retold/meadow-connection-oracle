@@ -1,0 +1,17 @@
+services:
+  oracle-test:
+    # Oracle Database 23ai Free — multi-arch (linux/amd64 + linux/arm64), so it
+    # runs natively on Apple Silicon (the older oracle-xe:21 image is amd64-only
+    # and fails under emulation with ORA-00443 / PMON not starting).
+    image: gvenzl/oracle-free:23-slim
+    container_name: meadow-connection-oracle-test
+    environment:
+      # SYS / SYSTEM password
+      ORACLE_PASSWORD: "Retold1234567890!"
+      # gvenzl auto-creates this user in its own schema inside the FREEPDB1 PDB
+      APP_USER: "bookstore"
+      APP_USER_PASSWORD: "Retold1234567890!"
+    ports:
+      - "21521:1521"
+    volumes:
+      - ./test/docker-init:/container-entrypoint-initdb.d
