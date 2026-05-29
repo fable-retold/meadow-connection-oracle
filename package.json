@@ -1,6 +1,6 @@
 {
     "name": "meadow-connection-oracle",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Meadow Oracle Plugin",
     "main": "source/Meadow-Connection-Oracle.js",
     "scripts": {
