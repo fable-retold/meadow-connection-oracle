@@ -1,0 +1,141 @@
+{
+	"Generated": "2026-05-30T22:11:57.129Z",
+	"Mode": "module",
+	"GitHubOrg": "fable-retold",
+	"DefaultBranch": "master",
+	"Module": {
+		"Name": "meadow-connection-oracle",
+		"Repo": "meadow-connection-oracle",
+		"Group": "",
+		"Branch": "master",
+		"HasDocs": true,
+		"HasCover": true,
+		"Sidebar": [
+			{
+				"Title": "Getting Started",
+				"Children": [
+					{
+						"Title": "Overview",
+						"Path": "README.md"
+					},
+					{
+						"Title": "Quickstart",
+						"Path": "quickstart.md"
+					}
+				]
+			},
+			{
+				"Title": "Architecture",
+				"Children": [
+					{
+						"Title": "Design & Data Flow",
+						"Path": "architecture.md"
+					},
+					{
+						"Title": "Schema & Table Creation",
+						"Path": "schema.md"
+					}
+				]
+			},
+			{
+				"Title": "API Reference",
+				"Children": [
+					{
+						"Title": "Full Reference",
+						"Path": "api/reference.md"
+					},
+					{
+						"Title": "connectAsync()",
+						"Path": "api/connectAsync.md"
+					},
+					{
+						"Title": "connect()",
+						"Path": "api/connect.md"
+					},
+					{
+						"Title": "getConnection()",
+						"Path": "api/getConnection.md"
+					},
+					{
+						"Title": "recyclePool()",
+						"Path": "api/recyclePool.md"
+					},
+					{
+						"Title": "pool",
+						"Path": "api/pool.md"
+					},
+					{
+						"Title": "generateCreateTableStatement()",
+						"Path": "api/generateCreateTableStatement.md"
+					},
+					{
+						"Title": "createTable()",
+						"Path": "api/createTable.md"
+					},
+					{
+						"Title": "createTables()",
+						"Path": "api/createTables.md"
+					},
+					{
+						"Title": "generateDropTableStatement()",
+						"Path": "api/generateDropTableStatement.md"
+					}
+				]
+			},
+			{
+				"Title": "Retold Ecosystem",
+				"Children": [
+					{
+						"Title": "Meadow",
+						"Path": "https://fable-retold.github.io/meadow/README.md"
+					},
+					{
+						"Title": "FoxHound",
+						"Path": "https://fable-retold.github.io/foxhound/README.md"
+					},
+					{
+						"Title": "Stricture",
+						"Path": "https://fable-retold.github.io/stricture/README.md"
+					},
+					{
+						"Title": "Meadow Endpoints",
+						"Path": "https://fable-retold.github.io/meadow-endpoints/README.md"
+					},
+					{
+						"Title": "Meadow Connection Manager",
+						"Path": "https://fable-retold.github.io/meadow-connection-manager/README.md"
+					},
+					{
+						"Title": "Meadow Connection MySQL",
+						"Path": "https://fable-retold.github.io/meadow-connection-mysql/README.md"
+					},
+					{
+						"Title": "Fable",
+						"Path": "https://fable-retold.github.io/fable/README.md"
+					}
+				]
+			}
+		],
+		"DocFiles": [
+			"README.md",
+			"_cover.md",
+			"_sidebar.md",
+			"_topbar.md",
+			"api/connect.md",
+			"api/connectAsync.md",
+			"api/createTable.md",
+			"api/createTables.md",
+			"api/generateCreateTableStatement.md",
+			"api/generateDropTableStatement.md",
+			"api/getConnection.md",
+			"api/pool.md",
+			"api/recyclePool.md",
+			"api/reference.md",
+			"api.md",
+			"architecture.md",
+			"quickstart.md",
+			"schema.md"
+		]
+	},
+	"Groups": []
+}
