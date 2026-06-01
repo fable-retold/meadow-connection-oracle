@@ -10,7 +10,7 @@ This guide walks through setting up Meadow Connection Oracle from scratch: insta
 - A running Oracle Database instance (11g through 23ai are supported)
 - A database user with privileges to create tables, sequences, triggers, and indices in its own schema
 
-No Oracle Instant Client is required &mdash; the provider uses the `oracledb` Thin driver.
+No Oracle Instant Client is required - the provider uses the `oracledb` Thin driver.
 
 ### Optional: a local test database
 
@@ -131,7 +131,7 @@ If you do not pass an explicit `connectString`, the provider builds an Easy Conn
 //   127.0.0.1:1521:ORCL
 ```
 
-To use a TNS alias or a full descriptor instead, set `connectString` directly &mdash; it overrides `server`, `port`, and `serviceName`:
+To use a TNS alias or a full descriptor instead, set `connectString` directly - it overrides `server`, `port`, and `serviceName`:
 
 ```javascript
 let _Fable = new libFable(
@@ -280,7 +280,7 @@ _Fable.MeadowOracleProvider.introspectDatabaseSchema(
 
 ## Step 7: Meadow ORM Integration
 
-With the provider connected, Meadow entities can query through it. FoxHound's Oracle dialect generates the SQL &mdash; identity inserts use `RETURNING` to return the generated key, and reads paginate with OFFSET/FETCH (or ROWNUM when `LegacyPagination` is on).
+With the provider connected, Meadow entities can query through it. FoxHound's Oracle dialect generates the SQL - identity inserts use `RETURNING` to return the generated key, and reads paginate with OFFSET/FETCH (or ROWNUM when `LegacyPagination` is on).
 
 The live test suite (`test/Oracle-Live_tests.js`) demonstrates the full round trip: connect, create the table, INSERT with `RETURNING INTO`, READ, paginate, and soft-delete.
 

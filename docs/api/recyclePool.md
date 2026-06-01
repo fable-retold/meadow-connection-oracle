@@ -12,7 +12,7 @@ recyclePool(fCallback)
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `fCallback` | function | No | Callback `(pError)` &mdash; the error is informational only; recycling always proceeds |
+| `fCallback` | function | No | Callback `(pError)` - the error is informational only; recycling always proceeds |
 
 ## Return Value
 

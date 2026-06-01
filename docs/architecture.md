@@ -96,7 +96,7 @@ Behavioral keys (`ConnectionPoolLimit`, `RequestTimeoutMs`, `ConnectionTimeoutMs
 
 ### oracledb Connection Pool (Thin Mode)
 
-The underlying pool managed by [oracledb](https://github.com/oracle/node-oracledb) in **Thin mode** &mdash; a pure-JavaScript implementation that needs no Oracle Instant Client:
+The underlying pool managed by [oracledb](https://github.com/oracle/node-oracledb) in **Thin mode** - a pure-JavaScript implementation that needs no Oracle Instant Client:
 
 - Maintains pooled connections up to `poolMax` (from `ConnectionPoolLimit`, default 10), starting at `poolMin: 0`.
 - Connections are acquired per operation and closed back to the pool.

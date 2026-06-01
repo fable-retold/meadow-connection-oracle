@@ -25,7 +25,7 @@ Since no callback is provided, you have no direct signal for when the pool is re
 
 ## Why connect() Exists
 
-Other Meadow connection providers expose a synchronous `connect()`. This method keeps the surface consistent so generic code that calls `connect()` does not throw. For Oracle it is strictly a convenience wrapper &mdash; the real work is asynchronous.
+Other Meadow connection providers expose a synchronous `connect()`. This method keeps the surface consistent so generic code that calls `connect()` does not throw. For Oracle it is strictly a convenience wrapper - the real work is asynchronous.
 
 ```javascript
 // Discouraged: fire-and-forget, no readiness signal

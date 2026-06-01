@@ -118,7 +118,7 @@ _Fable.serviceManager.instantiateServiceProvider('MeadowOracleProvider',
 
 Once the provider is connected, Meadow entities query through it when their provider is set to Oracle. [FoxHound](https://fable-retold.github.io/foxhound/) generates the Oracle-dialect SQL (identity `RETURNING`, OFFSET/FETCH or ROWNUM pagination) and Meadow routes it through the pooled connection.
 
-In unquoted-identifier mode (the default) Oracle folds identifiers to UPPERCASE, so result rows come back with UPPERCASE keys; the Meadow Oracle provider's marshaller remaps them to the schema's PascalCase. Set `QuoteIdentifiers: true` to preserve case &mdash; but the schema provider and the FoxHound Oracle dialect must agree on this setting or queries will not resolve.
+In unquoted-identifier mode (the default) Oracle folds identifiers to UPPERCASE, so result rows come back with UPPERCASE keys; the Meadow Oracle provider's marshaller remaps them to the schema's PascalCase. Set `QuoteIdentifiers: true` to preserve case - but the schema provider and the FoxHound Oracle dialect must agree on this setting or queries will not resolve.
 
 ## Table Creation
 

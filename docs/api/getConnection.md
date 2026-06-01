@@ -1,6 +1,6 @@
 # getConnection(fCallback)
 
-Acquires a connection from the oracledb pool. The Meadow Oracle provider uses this to run statements (oracledb has no separate prepared-statement class &mdash; statements are prepared implicitly per `execute()`, with pool statement caching).
+Acquires a connection from the oracledb pool. The Meadow Oracle provider uses this to run statements (oracledb has no separate prepared-statement class - statements are prepared implicitly per `execute()`, with pool statement caching).
 
 ## Signature
 

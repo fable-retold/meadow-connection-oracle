@@ -1,6 +1,6 @@
 # connectAsync(fCallback)
 
-Creates the `oracledb` connection pool, with retry and exponential backoff, then auto-detects the server version and resolves any unset legacy flags before invoking the callback. This is the primary way to connect &mdash; the oracledb driver establishes its pool asynchronously.
+Creates the `oracledb` connection pool, with retry and exponential backoff, then auto-detects the server version and resolves any unset legacy flags before invoking the callback. This is the primary way to connect - the oracledb driver establishes its pool asynchronously.
 
 ## Signature
 
@@ -86,7 +86,7 @@ _Fable.MeadowOracleProvider.connectAsync(
 
 After the pool is created, `connectAsync()` opens one connection to read `oracleServerVersion`. For each of `LegacyPagination` and `LegacyIdentity` that you did **not** set explicitly, it picks legacy behavior for servers below 12.1 and modern behavior otherwise. Explicitly configured flags are always honored. If the version cannot be read, unset flags default to modern (12c+) behavior.
 
-This means a fresh connection to a 23ai or 19c server resolves both flags to `false`, while a connection to an 11g server resolves them to `true` &mdash; with no configuration required.
+This means a fresh connection to a 23ai or 19c server resolves both flags to `false`, while a connection to an 11g server resolves them to `true` - with no configuration required.
 
 ## Idempotent Calls
 

@@ -122,7 +122,7 @@ Destroys the current pool (`close(0)`) and reconnects. Used internally by the re
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `fCallback` | function | No | Callback `(pError)` &mdash; the error is informational only |
+| `fCallback` | function | No | Callback `(pError)` - the error is informational only |
 
 ---
 
@@ -186,9 +186,9 @@ All query the connecting user's own schema via the `USER_*` data dictionary view
 
 | Method | Callback Result |
 |--------|-----------------|
-| `listTables(fCallback)` | `(pError, pTableNames)` &mdash; array of names |
-| `introspectTableColumns(pTableName, fCallback)` | `(pError, pColumns)` &mdash; Meadow column defs |
-| `introspectTableIndices(pTableName, fCallback)` | `(pError, pIndices)` &mdash; non-constraint indices |
+| `listTables(fCallback)` | `(pError, pTableNames)` - array of names |
+| `introspectTableColumns(pTableName, fCallback)` | `(pError, pColumns)` - Meadow column defs |
+| `introspectTableIndices(pTableName, fCallback)` | `(pError, pIndices)` - non-constraint indices |
 | `introspectTableForeignKeys(pTableName, fCallback)` | `(pError, pForeignKeys)` |
 | `introspectTableSchema(pTableName, fCallback)` | `(pError, pTableSchema)` |
 | `introspectDatabaseSchema(fCallback)` | `(pError, { Tables: [...] })` |

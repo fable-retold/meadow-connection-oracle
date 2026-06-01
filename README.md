@@ -1,8 +1,8 @@
 # Meadow Connection Oracle
 
-> **[&#9654; Read the Meadow-Connection-Oracle Documentation](https://fable-retold.github.io/meadow-connection-oracle/)** &mdash; interactive docs with the full API reference.
+> **[Read the Meadow-Connection-Oracle Documentation](https://fable-retold.github.io/meadow-connection-oracle/)** - interactive docs with the full API reference.
 
-An Oracle Database connection provider for the Meadow ORM. Wraps [oracledb](https://github.com/oracle/node-oracledb) (in Thin mode &mdash; no Oracle Instant Client required) as a Fable service, providing connection pooling, retry-with-backoff on transient failures, server-version-aware DDL generation from Meadow table schemas, and data-dictionary introspection.
+An Oracle Database connection provider for the Meadow ORM. Wraps [oracledb](https://github.com/oracle/node-oracledb) (in Thin mode - no Oracle Instant Client required) as a Fable service, providing connection pooling, retry-with-backoff on transient failures, server-version-aware DDL generation from Meadow table schemas, and data-dictionary introspection.
 
 [![Build Status](https://github.com/fable-retold/meadow-connection-oracle/workflows/Meadow-Connection-Oracle/badge.svg)](https://github.com/fable-retold/meadow-connection-oracle/actions)
 [![npm version](https://badge.fury.io/js/meadow-connection-oracle.svg)](https://badge.fury.io/js/meadow-connection-oracle)
@@ -127,7 +127,7 @@ When `connectString` is set, it is passed through unchanged (use this for a TNS 
 
 ### `connectAsync(fCallback)`
 
-Create the `oracledb` connection pool with retry and backoff, then resolve the server-version-dependent legacy flags. Always use this instead of `connect()` &mdash; the oracledb driver connects asynchronously.
+Create the `oracledb` connection pool with retry and backoff, then resolve the server-version-dependent legacy flags. Always use this instead of `connect()` - the oracledb driver connects asynchronously.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
