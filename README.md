@@ -4,9 +4,7 @@
 
 An Oracle Database connection provider for the Meadow ORM. Wraps [oracledb](https://github.com/oracle/node-oracledb) (in Thin mode - no Oracle Instant Client required) as a Fable service, providing connection pooling, retry-with-backoff on transient failures, server-version-aware DDL generation from Meadow table schemas, and data-dictionary introspection.
 
-[![Build Status](https://github.com/fable-retold/meadow-connection-oracle/workflows/Meadow-Connection-Oracle/badge.svg)](https://github.com/fable-retold/meadow-connection-oracle/actions)
-[![npm version](https://badge.fury.io/js/meadow-connection-oracle.svg)](https://badge.fury.io/js/meadow-connection-oracle)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[meadow-connection-oracle on npm](https://www.npmjs.com/package/meadow-connection-oracle) | [MIT License](LICENSE)
 
 ---
 
