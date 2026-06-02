@@ -1,0 +1,15 @@
+flowchart TD
+	A[Attempt operation] --> B{Error?}
+	B -->|No| C[Success -> callback]
+	B -->|Yes| D[Classify error]
+	D --> E{SuccessMode? e.g. AlreadyExists}
+	E -->|Yes| C
+	E -->|No| F{Retryable?}
+	F -->|No| G[Give up -> callback error]
+	F -->|Yes| H{Attempts exhausted?}
+	H -->|Yes| G
+	H -->|No| I{Recommend recycle AND hook present?}
+	I -->|Yes| J[recyclePool, then backoff]
+	I -->|No| K[Backoff]
+	J --> A
+	K --> A

@@ -1,0 +1,34 @@
+sequenceDiagram
+	participant App as Application
+	participant Fable as Fable Instance
+	participant MCO as MeadowConnectionOracle
+	participant Retry as Meadow-Oracle-Retry
+	participant Pool as oracledb Pool
+	participant Oracle as Oracle Server
+
+	App->>Fable: new libFable(config)
+	App->>Fable: addServiceType('MeadowOracleProvider', ...)
+	App->>Fable: instantiateServiceProvider('MeadowOracleProvider')
+	Fable->>MCO: constructor(fable, manifest, hash)
+	MCO->>MCO: Coerce config (PascalCase -> lowercase)
+	MCO->>MCO: Build MeadowSchemaOracle + back-reference
+
+	App->>MCO: connectAsync(callback)
+	MCO->>MCO: Build connect string + pool settings
+	MCO->>Retry: runWithRetry(connect)
+	Retry->>Pool: oracledb.createPool(settings)
+	Pool->>Oracle: Establish Thin-mode connections
+	Pool-->>Retry: pool (or retryable error)
+	Retry-->>MCO: pool
+	MCO->>MCO: connected = true; schemaProvider.setConnectionPool(pool)
+	MCO->>Pool: getConnection() -> read oracleServerVersion
+	MCO->>MCO: Resolve unset LegacyPagination / LegacyIdentity
+	MCO-->>App: callback(null, pool)
+
+	App->>MCO: getConnection(callback)
+	MCO->>Pool: pool.getConnection()
+	Pool-->>MCO: connection (callTimeout set)
+	MCO-->>App: callback(null, connection)
+	App->>Oracle: connection.execute(sql, binds)
+	Oracle-->>App: result
+	App->>Pool: connection.close()

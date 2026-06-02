@@ -1,0 +1,5 @@
+flowchart LR
+	A[DDL attempt fails] --> B{Mode recommends recycle?}
+	B -->|Yes| C[recyclePool]
+	C --> D[Backoff, then retry]
+	B -->|No| D

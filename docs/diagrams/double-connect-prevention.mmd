@@ -1,0 +1,7 @@
+flowchart TD
+	A[connectAsync called] --> B{Pool already exists?}
+	B -->|Yes| C[Log error, return existing pool via callback]
+	B -->|No| D[Build settings + connect with retry]
+	D --> E[Set connected = true, attach pool to schema provider]
+	E --> F[Detect server version + resolve legacy flags]
+	F --> G[callback with pool]

@@ -1,0 +1,33 @@
+graph TB
+	subgraph Application
+		A[Application Code]
+		B[Meadow ORM]
+		C[FoxHound Oracle Dialect]
+	end
+
+	subgraph MeadowConnectionOracle["Meadow Connection Oracle"]
+		D[MeadowConnectionOracle Service]
+		E[Configuration Coercion]
+		F[oracledb Connection Pool]
+		G[MeadowSchemaOracle]
+		H[Meadow-Oracle-Retry]
+	end
+
+	subgraph Database["Oracle Server"]
+		I[Oracle Database 11g - 23ai]
+	end
+
+	A -->|doCreate / doRead / doUpdate / doDelete| B
+	B -->|Oracle dialect| C
+	C -->|SQL + Binds| D
+	D -->|Settings| E
+	E -->|Coerced Config| F
+	D -->|DDL / Introspection| G
+	D -->|connect / DDL retry| H
+	G -->|DDL retry| H
+	F -->|Thin-mode TCP| I
+	G -->|Pooled connection| F
+
+	style MeadowConnectionOracle fill:#e8f4f8,stroke:#2E7D74,stroke-width:2px
+	style Application fill:#f5f0e8,stroke:#423D37,stroke-width:1px
+	style Database fill:#fef3e2,stroke:#c97a2e,stroke-width:1px

@@ -6,41 +6,8 @@ Meadow Connection Oracle bridges the Meadow data access layer and an Oracle Data
 
 ## System Architecture
 
-```mermaid
-graph TB
-	subgraph Application
-		A[Application Code]
-		B[Meadow ORM]
-		C[FoxHound Oracle Dialect]
-	end
-
-	subgraph MeadowConnectionOracle["Meadow Connection Oracle"]
-		D[MeadowConnectionOracle Service]
-		E[Configuration Coercion]
-		F[oracledb Connection Pool]
-		G[MeadowSchemaOracle]
-		H[Meadow-Oracle-Retry]
-	end
-
-	subgraph Database["Oracle Server"]
-		I[Oracle Database 11g - 23ai]
-	end
-
-	A -->|doCreate / doRead / doUpdate / doDelete| B
-	B -->|Oracle dialect| C
-	C -->|SQL + Binds| D
-	D -->|Settings| E
-	E -->|Coerced Config| F
-	D -->|DDL / Introspection| G
-	D -->|connect / DDL retry| H
-	G -->|DDL retry| H
-	F -->|Thin-mode TCP| I
-	G -->|Pooled connection| F
-
-	style MeadowConnectionOracle fill:#e8f4f8,stroke:#2E7D74,stroke-width:2px
-	style Application fill:#f5f0e8,stroke:#423D37,stroke-width:1px
-	style Database fill:#fef3e2,stroke:#c97a2e,stroke-width:1px
-```
+<!-- bespoke diagram: edit diagrams/system-architecture.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs -->
+![System Architecture](diagrams/system-architecture.svg)
 
 ---
 
@@ -61,36 +28,8 @@ The core class, extending `FableServiceProviderBase`. It manages the lifecycle o
 
 The constructor accepts settings under an `Oracle` key in three shapes and normalizes the core connection keys to lowercase:
 
-```mermaid
-graph LR
-	subgraph Meadow Style
-		A1["Server"]
-		A2["Port"]
-		A3["User"]
-		A4["Password"]
-		A5["ServiceName"]
-		A6["ConnectString"]
-	end
-
-	subgraph oracledb Native
-		B1["server"]
-		B2["port"]
-		B3["user"]
-		B4["password"]
-		B5["serviceName"]
-		B6["connectString"]
-	end
-
-	A1 --> B1
-	A2 --> B2
-	A3 --> B3
-	A4 --> B4
-	A5 --> B5
-	A6 --> B6
-
-	style Meadow Style fill:#f5f0e8,stroke:#423D37
-	style oracledb Native fill:#e8f4f8,stroke:#2E7D74
-```
+<!-- bespoke diagram: edit diagrams/configuration-coercion.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs -->
+![Configuration Coercion](diagrams/configuration-coercion.svg)
 
 Behavioral keys (`ConnectionPoolLimit`, `RequestTimeoutMs`, `ConnectionTimeoutMs`, `ConnectRetryOptions`, `DDLRetryOptions`, `LegacyPagination`, `LegacyIdentity`, `QuoteIdentifiers`, `NumberAsString`) are read as-is from the `Oracle` block.
 
@@ -115,42 +54,8 @@ A shared helper used by both providers to classify oracledb errors into failure 
 
 ## Connection Lifecycle
 
-```mermaid
-sequenceDiagram
-	participant App as Application
-	participant Fable as Fable Instance
-	participant MCO as MeadowConnectionOracle
-	participant Retry as Meadow-Oracle-Retry
-	participant Pool as oracledb Pool
-	participant Oracle as Oracle Server
-
-	App->>Fable: new libFable(config)
-	App->>Fable: addServiceType('MeadowOracleProvider', ...)
-	App->>Fable: instantiateServiceProvider('MeadowOracleProvider')
-	Fable->>MCO: constructor(fable, manifest, hash)
-	MCO->>MCO: Coerce config (PascalCase -> lowercase)
-	MCO->>MCO: Build MeadowSchemaOracle + back-reference
-
-	App->>MCO: connectAsync(callback)
-	MCO->>MCO: Build connect string + pool settings
-	MCO->>Retry: runWithRetry(connect)
-	Retry->>Pool: oracledb.createPool(settings)
-	Pool->>Oracle: Establish Thin-mode connections
-	Pool-->>Retry: pool (or retryable error)
-	Retry-->>MCO: pool
-	MCO->>MCO: connected = true; schemaProvider.setConnectionPool(pool)
-	MCO->>Pool: getConnection() -> read oracleServerVersion
-	MCO->>MCO: Resolve unset LegacyPagination / LegacyIdentity
-	MCO-->>App: callback(null, pool)
-
-	App->>MCO: getConnection(callback)
-	MCO->>Pool: pool.getConnection()
-	Pool-->>MCO: connection (callTimeout set)
-	MCO-->>App: callback(null, connection)
-	App->>Oracle: connection.execute(sql, binds)
-	Oracle-->>App: result
-	App->>Pool: connection.close()
-```
+<!-- bespoke diagram: edit diagrams/connection-lifecycle.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs -->
+![Connection Lifecycle](diagrams/connection-lifecycle.svg)
 
 ---
 
@@ -164,22 +69,8 @@ Settings flow through a priority chain in the constructor:
 
 The pool itself is created later, on `connectAsync()`.
 
-```mermaid
-flowchart TD
-	A[Constructor Called] --> B{options.Oracle object?}
-	B -->|Yes| C[Coerce PascalCase keys to lowercase]
-	B -->|No| D{options.user is a string?}
-	D -->|Yes| E[Gather flat keys into Oracle block]
-	D -->|No| F{fable.settings.Oracle object?}
-	F -->|Yes| G[Build Oracle block from settings]
-	F -->|No| H[No Oracle config available]
-	C --> I[Build MeadowSchemaOracle]
-	E --> I
-	G --> I
-	I --> J[Wait for connectAsync]
-	J --> K[Build pool settings + connect with retry]
-	K --> L[Detect server version, resolve legacy flags]
-```
+<!-- bespoke diagram: edit diagrams/configuration-pipeline.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs -->
+![Configuration Pipeline](diagrams/configuration-pipeline.svg)
 
 ---
 
@@ -187,23 +78,8 @@ flowchart TD
 
 `generateCreateTableStatement()` walks a Meadow table schema and produces Oracle DDL:
 
-```mermaid
-flowchart LR
-	A[Meadow Table Schema] --> B[Walk Columns Array]
-	B --> C{DataType?}
-	C -->|ID 12c+| D["NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY"]
-	C -->|ID legacy| D2["NUMBER PRIMARY KEY (+ sequence + trigger)"]
-	C -->|GUID| E["VARCHAR2(Size) DEFAULT '0000...' NOT NULL"]
-	C -->|ForeignKey| F["NUMBER DEFAULT 0 NOT NULL"]
-	C -->|Numeric| G["NUMBER DEFAULT 0 NOT NULL"]
-	C -->|Decimal| H["NUMBER(Size)"]
-	C -->|String| I["VARCHAR2(Size) DEFAULT ' '"]
-	C -->|Text / JSON| J["CLOB"]
-	C -->|DateTime| K["TIMESTAMP"]
-	C -->|Boolean| L["NUMBER(1) DEFAULT 0"]
-	D --> M["CREATE TABLE Name ( ... )"]
-	D2 --> M
-```
+<!-- bespoke diagram: edit diagrams/ddl-generation-flow.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs -->
+![DDL Generation Flow](diagrams/ddl-generation-flow.svg)
 
 `generateCreateTableStatements()` returns an ordered array. For the 12c+ identity path that is just the `CREATE TABLE`; for the legacy (11g) path it appends a `CREATE SEQUENCE SEQ_<Table>` and a `CREATE OR REPLACE TRIGGER TRG_<Table>` that populates the ID column on insert, so the dialect's `RETURNING` clause works unchanged across versions.
 
@@ -241,23 +117,8 @@ The `Meadow-Oracle-Retry` helper wraps connect and DDL operations. It classifies
 
 `runWithRetry()` then drives the operation:
 
-```mermaid
-flowchart TD
-	A[Attempt operation] --> B{Error?}
-	B -->|No| C[Success -> callback]
-	B -->|Yes| D[Classify error]
-	D --> E{SuccessMode? e.g. AlreadyExists}
-	E -->|Yes| C
-	E -->|No| F{Retryable?}
-	F -->|No| G[Give up -> callback error]
-	F -->|Yes| H{Attempts exhausted?}
-	H -->|Yes| G
-	H -->|No| I{Recommend recycle AND hook present?}
-	I -->|Yes| J[recyclePool, then backoff]
-	I -->|No| K[Backoff]
-	J --> A
-	K --> A
-```
+<!-- bespoke diagram: edit diagrams/retry-and-error-classification.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs -->
+![Retry and Error Classification](diagrams/retry-and-error-classification.svg)
 
 Backoff is exponential (`InitialDelayMs * BackoffFactor^(attempt-1)`, capped at `MaxDelayMs`). Defaults: connect uses 5 attempts starting at 3s; DDL uses 5 attempts starting at 3s; the retry engine's base defaults are 5 attempts / 2s initial / 30s cap / factor 2. All are overridable via `Oracle.ConnectRetryOptions` and `Oracle.DDLRetryOptions`.
 
@@ -267,15 +128,8 @@ When a retry recommends recycling, the schema provider's retry hook calls the co
 
 ## Double-Connect Prevention
 
-```mermaid
-flowchart TD
-	A[connectAsync called] --> B{Pool already exists?}
-	B -->|Yes| C[Log error, return existing pool via callback]
-	B -->|No| D[Build settings + connect with retry]
-	D --> E[Set connected = true, attach pool to schema provider]
-	E --> F[Detect server version + resolve legacy flags]
-	F --> G[callback with pool]
-```
+<!-- bespoke diagram: edit diagrams/double-connect-prevention.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs -->
+![Double-Connect Prevention](diagrams/double-connect-prevention.svg)
 
 If `connectAsync()` is called when a pool already exists, it logs an error and returns the existing pool without creating a second one. A missing callback is replaced with a no-op (and a warning is logged).
 
@@ -285,27 +139,8 @@ If `connectAsync()` is called when a pool already exists, it logs an error and r
 
 When Meadow uses the Oracle provider, queries follow this path:
 
-```mermaid
-sequenceDiagram
-	participant App as Application
-	participant Meadow as Meadow Entity
-	participant FH as FoxHound (Oracle dialect)
-	participant Provider as Meadow Oracle Provider
-	participant MCO as MeadowConnectionOracle
-	participant Pool as oracledb Pool
-
-	App->>Meadow: doReads(query, callback)
-	Meadow->>FH: Build Oracle SQL (OFFSET/FETCH or ROWNUM)
-	FH-->>Meadow: SQL string + binds
-	Meadow->>Provider: Execute read
-	Provider->>MCO: getConnection()
-	MCO-->>Provider: pooled connection
-	Provider->>Pool: connection.execute(sql, binds)
-	Pool-->>Provider: rows (UPPERCASE keys in unquoted mode)
-	Provider->>Provider: Marshal rows back to PascalCase
-	Provider-->>Meadow: records
-	Meadow-->>App: callback(error, query, records)
-```
+<!-- bespoke diagram: edit diagrams/meadow-integration.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs -->
+![Meadow Integration](diagrams/meadow-integration.svg)
 
 The pool is shared across all Meadow entities resolving the same Fable service instance. Identity inserts use FoxHound's `RETURNING` clause to return the generated key; in legacy mode the sequence + trigger populate the key so `RETURNING` still works.
 

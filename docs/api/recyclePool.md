@@ -29,13 +29,8 @@ None (result provided via callback).
 
 You normally do not call `recyclePool()` directly. The DDL retry path wires it in as the `OnRecyclePool` hook: when an attempt fails with a mode whose classification recommends recycling (`RequestTimeout`, `NetworkError`, `PoolDegraded`), the retry helper recycles the pool before the next attempt and re-points the schema provider at the new pool.
 
-```mermaid
-flowchart LR
-	A[DDL attempt fails] --> B{Mode recommends recycle?}
-	B -->|Yes| C[recyclePool]
-	C --> D[Backoff, then retry]
-	B -->|No| D
-```
+<!-- bespoke diagram: edit diagrams/when-it-runs.mmd or .hints.json, then: npx pict-renderer-graph build modules/meadow/meadow-connection-oracle/docs/api -->
+![When It Runs](diagrams/when-it-runs.svg)
 
 ## Manual Use
 

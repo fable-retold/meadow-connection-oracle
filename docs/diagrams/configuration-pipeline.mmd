@@ -1,0 +1,14 @@
+flowchart TD
+	A[Constructor Called] --> B{options.Oracle object?}
+	B -->|Yes| C[Coerce PascalCase keys to lowercase]
+	B -->|No| D{options.user is a string?}
+	D -->|Yes| E[Gather flat keys into Oracle block]
+	D -->|No| F{fable.settings.Oracle object?}
+	F -->|Yes| G[Build Oracle block from settings]
+	F -->|No| H[No Oracle config available]
+	C --> I[Build MeadowSchemaOracle]
+	E --> I
+	G --> I
+	I --> J[Wait for connectAsync]
+	J --> K[Build pool settings + connect with retry]
+	K --> L[Detect server version, resolve legacy flags]

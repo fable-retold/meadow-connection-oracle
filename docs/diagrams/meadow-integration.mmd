@@ -1,0 +1,19 @@
+sequenceDiagram
+	participant App as Application
+	participant Meadow as Meadow Entity
+	participant FH as FoxHound (Oracle dialect)
+	participant Provider as Meadow Oracle Provider
+	participant MCO as MeadowConnectionOracle
+	participant Pool as oracledb Pool
+
+	App->>Meadow: doReads(query, callback)
+	Meadow->>FH: Build Oracle SQL (OFFSET/FETCH or ROWNUM)
+	FH-->>Meadow: SQL string + binds
+	Meadow->>Provider: Execute read
+	Provider->>MCO: getConnection()
+	MCO-->>Provider: pooled connection
+	Provider->>Pool: connection.execute(sql, binds)
+	Pool-->>Provider: rows (UPPERCASE keys in unquoted mode)
+	Provider->>Provider: Marshal rows back to PascalCase
+	Provider-->>Meadow: records
+	Meadow-->>App: callback(error, query, records)
