@@ -264,6 +264,7 @@ class MeadowSchemaOracle extends libFableServiceProviderBase
 			let tmpColumnDDL = this._columnDDL(pMeadowTableSchema.Columns[j]);
 			if (tmpColumnDDL === false)
 			{
+				this.log.error(`Meadow-Oracle ${pMeadowTableSchema.TableName}.${pMeadowTableSchema.Columns[j].Column} has unsupported DataType [${pMeadowTableSchema.Columns[j].DataType}]; the column is omitted from the generated DDL.`);
 				continue;
 			}
 			if (!tmpFirst)
