@@ -3,6 +3,9 @@
     "version": "1.0.3",
     "description": "Meadow Oracle Plugin",
     "main": "source/Meadow-Connection-Oracle.js",
+    "files": [
+        "source"
+    ],
     "scripts": {
         "coverage": "npx quack coverage",
         "test": "npx quack test",
